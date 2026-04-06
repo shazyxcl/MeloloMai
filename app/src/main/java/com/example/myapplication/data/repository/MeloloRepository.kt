@@ -14,7 +14,8 @@ class MeloloRepository {
         try {
             val response = apiService.getLatestDramas()
             if (response.status == "success") {
-                Result.success(response.data)
+                // Mengambil items dari dalam data object
+                Result.success(response.data.items)
             } else {
                 Result.failure(Exception(response.message))
             }
@@ -27,6 +28,33 @@ class MeloloRepository {
         try {
             val response = apiService.getTrendingDramas()
             if (response.status == "success") {
+                Result.success(response.data.items)
+            } else {
+                Result.failure(Exception(response.message))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun searchDramas(query: String, limit: Int = 10, offset: Int = 0): Result<List<DramaItem>> = 
+        withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.searchDramas(query, limit, offset)
+                if (response.status == "success") {
+                    Result.success(response.data.items)
+                } else {
+                    Result.failure(Exception(response.message))
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    
+    suspend fun getDramaDetail(bookId: String): Result<DramaDetail> = withContext(Dispatchers.IO) {
+        try {
+            val response = apiService.getDramaDetail(bookId)
+            if (response.status == "success") {
                 Result.success(response.data)
             } else {
                 Result.failure(Exception(response.message))
@@ -35,6 +63,20 @@ class MeloloRepository {
             Result.failure(e)
         }
     }
+    
+    suspend fun getStreamUrl(videoId: String): Result<StreamData> = withContext(Dispatchers.IO) {
+        try {
+            val response = apiService.getStreamUrl(videoId)
+            if (response.status == "success") {
+                Result.success(response.data)
+            } else {
+                Result.failure(Exception(response.message))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}    }
     
     suspend fun searchDramas(query: String, limit: Int = 10, offset: Int = 0): Result<List<DramaItem>> = 
         withContext(Dispatchers.IO) {
