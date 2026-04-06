@@ -2,7 +2,6 @@ package com.example.myapplication.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.IgnoredOnParcel
 
 @Parcelize
 data class Drama(
